@@ -1,21 +1,27 @@
 import React from 'react';
-import { Card, Image, Grid, Divider } from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { 
+  Card, 
+  Image, 
+  Divider, 
+} from 'semantic-ui-react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setHeaders } from '../actions/headers';
 
 class MyCats extends React.Component {
   state = { cats: [] }
 
   componentDidMount() {
+    const { dispatch } = this.props;
     axios.get('/api/my_cats')
       .then( res => {
         this.setState({ cats: res.data })
-        this.props.dispatch({ type: 'HEADERS', headers: res.headers })
+        dispatch(setHeaders(res.headers));
       });
   }
 
   render() {
-    let { cats } = this.state;
+    const { cats } = this.state;
     return (
       <Card.Group itemsPerRow={4}>
         { cats.map( cat =>
@@ -36,3 +42,4 @@ class MyCats extends React.Component {
 }
 
 export default connect()(MyCats)
+
